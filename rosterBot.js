@@ -37,7 +37,7 @@ client.on('message', async msg => {	// This code block runs when a user sends a 
 	}
 	else
 	{
-		attemptedCommand = msg.content.split(" ")[0].substring(commandSymbol.length, msg.content.split(" ")[0].length) // attemptedCommand = the command minus the ! symbol
+		attemptedCommand = msg.content.split(" ")[0].substring(commandSymbol.length, msg.content.split(" ")[0].length); // attemptedCommand = the command minus the ! symbol
 	}
 
 	const myGuild = client.guilds.cache.get('634627332346347550'); // Server ID goes here
@@ -46,7 +46,7 @@ client.on('message', async msg => {	// This code block runs when a user sends a 
 	const role3 = myGuild.roles.cache.find(role => role.name === 'Operator Boogaloo');
 	const multirole1 = myGuild.roles.cache.find(role => role.name === 'Captain');
 
-	if(attemptedCommand == "roster")
+	if(attemptedCommand == rosterCommandString)
 	{
 		rosterCommand(msg, role1);
 	}
@@ -57,17 +57,31 @@ function help(msg)
 	msg.channel.send('I need to put how to use the bot here');
 }
 
-function rosterCommand(msg, role1, role2, role3, role4)
+function rosterCommand(message, role1, role2, role3, role4)
 {
+	let role = message.mentions.roles.first();
+	if(!role) role = message.guild.roles.cache.find(r => r.id == args[0]);
+	if(!role) message.channel.send('that role does not exist!');
+	let arr = new Array();
+	role.members.forEach(user => {
+		arr.push(`--> **${user.user.username}**`);
+	});
+	message.channel.send(role1.name + "\n- - - - - -\n" + arr.join('\n'));
+
 	//msg.channel.send("role id: " + role1.id);
 
+	/*
 	msg.guild.members.fetch()
     .then(members => {
         const role1Members = members.filter(mmbr => mmbr.roles.cache.get(role1.id)).map(m => m.user.tag).join('\n')
         const embed = new Discord.MessageEmbed()
-        .setDescription(role1Members);
-        msg.say(embed);
+        .setDescription(role1Members + " <-- if this says undefined... fuck");
+        msg.reply(embed);
+		msg.channel.send("test1");
+		msg.channel.send(role1Members + " <-- if this says undefined... fuck");
     });
+	*/
+
 	//msg.channel.send(role1Members);
-	//msg.guild.roles.get('415665311828803584').members.map(m=>m.user.tag);
+	//msg.guild.roles.get(role1.id).members.map(m=>m.user.tag);
 }
