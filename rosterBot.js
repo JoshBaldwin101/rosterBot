@@ -20,7 +20,7 @@ client.on('ready', () => {
 client.login(process.env.DISCORD_TOKEN);
 
 // All commands must begin with this symbol:
-var commandSymbol = '+'; // Example: "!help", "!echo Hello World!"
+var commandSymbol = '+';
 var rosterCommandString = 'roster';
 var helpCommandString = 'help';
 var resetCommandString = 'reset';
@@ -39,8 +39,8 @@ validatedUsers = [
 
 
 client.on('message', async msg => {	// This code block runs when a user sends a Discord message anywhere that the bot can read
-	// This should keep the bot from responding to itself
-	if(msg.author.bot) return;
+	
+	if(msg.author.bot) return; // This should keep the bot from responding to itself
 
 	var isAValidatedUser = false;
 	for(var i = 0; i < validatedUsers.length; i++)
@@ -58,7 +58,7 @@ client.on('message', async msg => {	// This code block runs when a user sends a 
 		return;
 	}
 
-	client.user.setActivity("" + commandSymbol + helpCommandString); // Leave this here
+	client.user.setActivity("" + commandSymbol + helpCommandString);
 
 	if(msg.content.substring(0, 1) == "+")
 	{
@@ -161,8 +161,12 @@ function roster(msg)
 
 	var memberCount = 0;
 	let role = msg.mentions.roles.first();
-	if(!role) role = msg.guild.roles.cache.find(r => r.id == args[0]);
-	if(!role) msg.channel.send('that role does not exist. That, or the role is set up in such a way that it can\'t be @mentioned.');
+	if(!role || role == null) 
+	{
+		msg.reply('something went wrong. Try ' + commandSymbol + helpCommandString + 
+		". It might also be that you forgot to @mention the role. Make sure you have the correct permissions to @mention that particular role. Otherwise, that role does not exist.");
+		return;
+	}
 	let arr = new Array();
 	role.members.forEach(user => {
 		arr.push(`${user.user.username}`);
