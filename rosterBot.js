@@ -142,7 +142,7 @@ function help(msg)	// Your standard help command. Two help commands: #1: reminde
 	{
 		msg.channel.send('Roster command usage: ```\n' + commandSymbol + rosterCommandString + ' @AnyRole```This displays the members of the @\'d role.\n' + '\nSymbol change command usage: ```\n'
 		+ commandSymbol + symbolChangeCommandString +
-		' [new command symbol]```' + 'This changes the symbol used to invoke commands. Defaults to +\nWarning: for command symbol changing, be mindful not to include spaces unless you know what you\'re doing.\n'
+		' [new command symbol]```' + 'This changes the symbol used to invoke commands. Defaults to ' + defaultCommandSymbol + '\nWarning: for command symbol changing, be mindful not to include spaces unless you know what you\'re doing.\n'
 		+ '\nReset command usage: ```\n' + defaultCommandSymbol + resetCommandString + '\nOR\n' + commandSymbol + resetCommandString + '```This resets the command symbol to the default: +');
 	}
 	else
@@ -150,7 +150,7 @@ function help(msg)	// Your standard help command. Two help commands: #1: reminde
 		msg.channel.send('Roster command usage: ```\n' + commandSymbol + rosterCommandString + ' @AnyRole```This displays the members of the @\'d role.\n' + '\nSymbol change command usage: ```\n'
 		+ commandSymbol + symbolChangeCommandString +
 		' [new command symbol]```' + 'This changes the symbol used to invoke commands. Defaults to +\nWarning: for command symbol changing, be mindful not to include spaces unless you know what you\'re doing.\n'
-		+ '\nReset command usage: ```\n' + defaultCommandSymbol + resetCommandString + '```This resets the command symbol to the default: +');
+		+ '\nReset command usage: ```\n' + defaultCommandSymbol + resetCommandString + '```This resets the command symbol to the default: ' + defaultCommandSymbol);
 	}
 }
 
@@ -183,18 +183,18 @@ function roster(msg)	// Executes the roster command which lists guild users with
 		return;
 	}
 
-	var memberCount = 0;
-	let role = msg.mentions.roles.first();
-	if(!role || role == null) 
+	var memberCount = 0;	// Instantiate and reset member count
+	let role = msg.mentions.roles.first();	// Find the @ mentioned role
+	if(!role || role == null) 	// In case they didn't mention a role or mentioned a non-existing one
 	{
 		msg.reply('something went wrong. Try ' + commandSymbol + helpCommandString + 
 		". It might also be that you forgot to @mention the role. Make sure you have the correct permissions to @mention that particular role. Otherwise, that role does not exist.");
 		return;
 	}
 	let arr = new Array();
-	role.members.forEach(user => {
+	role.members.forEach(user => {	// Populates array with members with the specified guild role
 		arr.push(`${user.user.username}`);
 		memberCount++;
 	});
-	msg.channel.send("```\nRole name: " + role.name + "\nUsers with this role: " + memberCount + "\n- - - - - - - - - - - - -\n" + arr.join('\n') + "```");
+	msg.channel.send("```\nRole name: " + role.name + "\nUsers with this role: " + memberCount + "\n- - - - - - - - - - - - -\n" + arr.join('\n') + "```"); // Print the names
 }
