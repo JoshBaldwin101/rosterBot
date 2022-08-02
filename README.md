@@ -3,7 +3,7 @@ Just a fun hobby project.
 Coded in JavaScript using Discord API. 
 
 For Tim aka Spaxxow
-Made by Josh Baldwin aka X3liteNinjaX#6891
+Made by Josh Baldwin aka Josh#0008
 
 ------
 
